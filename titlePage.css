@@ -13,11 +13,14 @@ body {
 #logoImage {
     position: relative;
     margin: auto;
-    transform: rotate(-15deg)
+    transform: rotate(-15deg);
+    height:auto;
+    width: 30vmin;
 }
 
 #nameImage{
-    height: 120px;
+    width: 70vmin;
+    height: auto;
 }
 
 .formSection {

@@ -32,7 +32,8 @@ table{
 }
 
 .orange{
-  position: relative
+  position: relative;
+  height:9vmin;
 }
 
 #foodName {
@@ -41,7 +42,10 @@ table{
 
 #logo {
   display: inline-block;
-  width: 5%;
+  width: auto;
+  position: absolute;
+  height:100%;
+  top:-3%;
 }
 
 #logo:hover{
@@ -55,8 +59,10 @@ table{
     top: 50%;
     transform: translateY(-50%);
     color: rgb(5, 129, 5);
-    font-size: 24px;
+    font-size: 2rem;
     font-weight: bold;
+    left:10%;
+    text-shadow: 1px 1px black;
 }
 
 .foodName {
@@ -70,6 +76,14 @@ table{
 
 #pic img{
   width: 60%;
+  position: relative;
+  left:50%;
+  transform: translateX(-50%);
+}
+#question{
+  position: relative;
+  left:75%;
+  transform: translateX(-50%);
 }
 
 .nutritionTitles {
@@ -194,4 +208,30 @@ table{
 
 .adp-substep{
   color: white;
+}
+
+@media only screen and (max-width: 600px) {
+.mapAndPicContainer{
+  width: 80%;
+  display: block;
+}
+
+#pic img{
+  position: relative;
+  left: 50%;
+  transform:translateX(-50%);
+}
+
+#question{
+  position: relative;
+  left:50%;
+  transform: translateX(-50%);
+}
+#findMore{
+  left:3%;
+}
+#reset{
+  left:9%;
+}
+
 }
