@@ -80,8 +80,10 @@ function submitFormData () {
  * set a timeout to submit the form data after a short delay 1 second
  */
 function showMap(){
+   
   $("#pic").hide();
   $("#map").show();
+  $("#findMore").hide();
   foodInput = sessionStorage.getItem("setFood");
   $("#pac-input").val(foodInput);
   setTimeout(submitFormData, 1000);

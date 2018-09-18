@@ -31,7 +31,7 @@ table{
    height: 100%;
 }
 
-.orange{
+.header{
   position: relative;
   height:9vmin;
 }
@@ -73,6 +73,7 @@ table{
   width: 100%;
   margin-top: 1%;
 }
+
 
 #pic img{
   width: 60%;
@@ -174,8 +175,14 @@ table{
   height: 50vh;
 }
 
+.yelpImageContainer{
+  max-width: 100%;
+  max-height: 100%;
+  font-size: 0;
+}
+
 #yelpImage {
-  height:100%;
+  height:auto;
   width: 100%;
   font-size:0;
 }
@@ -189,12 +196,13 @@ table{
   font-weight: bold;
   border: 1.2px solid black;
   position: relative;
-  bottom:0.75vw;
 }
 
 .yelpTitle, .yelpInfo {
   padding-left: 2%;
   padding-bottom: 3%;
+  display:none;
+  font-size:1em;
 }
 
 .modal {
@@ -208,6 +216,10 @@ table{
 
 .adp-substep{
   color: white;
+}
+
+.show{
+  display:block;
 }
 
 @media only screen and (max-width: 600px) {
@@ -226,12 +238,15 @@ table{
   position: relative;
   left:50%;
   transform: translateX(-50%);
+  width:107%;
 }
 #findMore{
   left:3%;
+  margin:1%
 }
 #reset{
-  left:9%;
+  left:0%;
+  margin: 1%;
 }
 
 }
