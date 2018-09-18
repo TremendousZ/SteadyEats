@@ -196,13 +196,19 @@ table{
   font-weight: bold;
   border: 1.2px solid black;
   position: relative;
+  left:15%;
+  top:75%;
+}
+.yelpInfo{
+  left:40%;
+  top:75%;
 }
 
 .yelpTitle, .yelpInfo {
-  padding-left: 2%;
-  padding-bottom: 3%;
+  padding: 1%;
   display:none;
   font-size:1em;
+  position: absolute;
 }
 
 .modal {
@@ -247,6 +253,11 @@ table{
 #reset{
   left:0%;
   margin: 1%;
+}
+.yelpTitle, .yelpInfo {
+  position: relative;
+  left:0%;
+  top:0%;
 }
 
 }
