@@ -2,11 +2,10 @@ $(document).ready(initializeApp);
 
 let infoWindow;
 
-let origin = {lat: 33.6348676, lng: -117.7405317};
-
-$(document).ready(initializeApp);
-
-let foodName = sessionStorage.getItem("setFood").toLowerCase();
+let userLat = parseFloat(localStorage.getItem('userLat'));
+let userLng = localStorage.getItem('userLng');
+let origin = {lat:userLat,lng:userLng};
+console.log(origin);
 let map;
 let previousInfoWindow = false;
 let previousRoute = false;
@@ -104,25 +103,25 @@ function initAutocomplete() {
     infoWindow = new google.maps.InfoWindow;
 
     //this is gives us the current location
-    if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(function(position) {
-            const pos = {
-                lat: position.coords.latitude,
-                lng: position.coords.longitude
-            };
+    // if (navigator.geolocation) {
+    //     navigator.geolocation.getCurrentPosition(function(position) {
+    //         const pos = {
+    //             lat: position.coords.latitude,
+    //             lng: position.coords.longitude
+    //         };
 
-            infoWindow.setPosition(pos);
+            infoWindow.setPosition(origin);
             infoWindow.setContent('You are Here');
             infoWindow.open(map);
-            map.setCenter(pos);
+            map.setCenter(origin);
             previousInfoWindow = infoWindow;
-        }, function() {
+            () => {
             handleLocationError(true, infoWindow, map.getCenter());
-        });
-    } else {
-        // Browser doesn't support Geolocation
-        handleLocationError(false, infoWindow, map.getCenter());
-    }
+        };
+    // } else {
+    //     // Browser doesn't support Geolocation
+    //     handleLocationError(false, infoWindow, map.getCenter());
+    // }
 
     // Create the search box and link it to the search bar element with the id of pac-input.
     let input = document.getElementById('pac-input');
