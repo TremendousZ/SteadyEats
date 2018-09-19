@@ -50,6 +50,14 @@ body {
     display:none;
 }
 
+.marker-list li {
+  cursor: pointer;
+}
+
+.marker-list li:hover{
+  cursor: pointer;
+  color:yellowgreen;
+}
   
   table{
       background-color: green;
