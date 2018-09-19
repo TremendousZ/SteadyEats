@@ -5,6 +5,7 @@ let food = null;
 let userPosition = {lat:0,lng:0};
 var labels = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
 var labelIndex = 0;
+var markerMap = {}
 /**
  * apply click handlers once document is ready
  * @param {}
@@ -18,37 +19,37 @@ function initializeApp () {
 /**
  * autofill complete
  */
-$(function() {
-    $('input.autocomplete').autocomplete({
-        // can ajax nutri api for list, but unable too
-      data: {
-        "Apple": null,
-        "Chicken": null,
-        "Taco": null,
-        "Wings": null,
-        "Burritos": null,
-        "Cake": null,
-        "Rice": null,
-        "Pizza": null,
-        "Curry": null,
-        "Orange": null,
-        "Beer": null,
-        "Wine": null,
-        "Burger": null,
-        "Fish": null,
-        "Ice Cream": null,
-        "Strawberry": null,
-        "Cheese": null,
-        "Bread": null,
-        "Chips": null,
-        "Salsa": null,
-        "String cheese": null,
-        "Tofu": null,
-        "Salad": null,
-        "Ramen": null,
-      }
-    });
-});
+// $(function() {
+//     $('#food').autocomplete({
+//         // can ajax nutri api for list, but unable too
+//       data: {
+//         "Apple": null,
+//         "Chicken": null,
+//         "Taco": null,
+//         "Wings": null,
+//         "Burritos": null,
+//         "Cake": null,
+//         "Rice": null,
+//         "Pizza": null,
+//         "Curry": null,
+//         "Orange": null,
+//         "Beer": null,
+//         "Wine": null,
+//         "Burger": null,
+//         "Fish": null,
+//         "Ice Cream": null,
+//         "Strawberry": null,
+//         "Cheese": null,
+//         "Bread": null,
+//         "Chips": null,
+//         "Salsa": null,
+//         "String cheese": null,
+//         "Tofu": null,
+//         "Salad": null,
+//         "Ramen": null,
+//       }
+//     });
+// });
 
 /**
  * Applies click handler to the submit button
@@ -223,12 +224,16 @@ function initAutocomplete() {
 
     let markers = [];
 
+    var marker, i;
+
+
+
     // Listen for the event fired when the user selects a prediction and retrieve
     // more details for that place.
     searchBox.addListener('places_changed', function() {
       let places = searchBox.getPlaces();
         console.log("Places:", places);
-        listFoodLocations(places);
+        // listFoodLocations(places);
         if (places.length == 0) {
             return;
         }
@@ -239,7 +244,7 @@ function initAutocomplete() {
         markers = [];
         console.log("Markers:" , markers);
         let bounds = new google.maps.LatLngBounds();
-        places.forEach(function(place) {
+        places.forEach(function(place, index) {
             if (!place.geometry) {
                 return;
             }
@@ -248,8 +253,8 @@ function initAutocomplete() {
                 content: `${place.name} <br> Rating: ${place.rating} `,
                 pixelOffset: new google.maps.Size(0, 0)
             });
-            
-            let markerLocation = new google.maps.Marker({
+            markerMap[ "marker-" + labelIndex ] = marker 
+            var marker = new google.maps.Marker({
                 map: map,
                 // icon: 'http://maps.google.com/mapfiles/ms/icons/orange-dot.png',
                 label: labels[labelIndex++ % labels.length],
@@ -257,9 +262,12 @@ function initAutocomplete() {
                 position: place.geometry.location
             });
 
-            markerLocation.addListener('click', function() {
+            marker.addListener('click', openInfoAndDisplayRoute);
+
+            function openInfoAndDisplayRoute() {
                 previousInfoWindow.close();
-                infoWindow.open(map, markerLocation);
+               
+                infoWindow.open(map, marker);
                 previousInfoWindow = infoWindow;
                 // break the address up into street address , cit
                 const arrayOfString = place.formatted_address.split(',');
@@ -271,9 +279,13 @@ function initAutocomplete() {
                 // send the relevant info to Google Directions
                 requestYelpData(name , address, cityName);
                 displayRoute( '', place.formatted_address);
-            });
+            }
+
+            let foodEstablishmentName = $('<li>').text(`${labels[index]}. ${place.name}`).attr('data-id', `marker-${index}`);
+            foodEstablishmentName.on('click', openInfoAndDisplayRoute);
+            $('.marker-list').append(foodEstablishmentName);
             // Create a marker for each place.
-            markers.push(markerLocation);
+            markers.push(marker);
 
             if (place.geometry.viewport) {
                 bounds.union(place.geometry.viewport);
@@ -319,10 +331,17 @@ function displayRoute(origin, destination) {
         origin: userPosition,
         destination: destination,
         travelMode: 'DRIVING',
-        avoidTolls: true
+        drivingOptions:{
+            departureTime: new Date(Date.now()),
+            trafficModel: 'bestguess',
+        },
+        avoidTolls: true,
     }, function(response, status) {
       console.log("directions response",response);
         if (status === 'OK') {
+            let distance = response.routes[0].legs[0].distance.text
+            let duration = response.routes[0].legs[0].duration.text
+            appendDrivingInfo(distance,duration);
             if (previousRoute){
                 //here we set previous route to null so it clears the previous route
                 previousRoute.setMap(null);
@@ -336,6 +355,10 @@ function displayRoute(origin, destination) {
     });
 }
 
+function appendDrivingInfo(distance, duration){
+    $('.distance').text(`${distance} from your location`);
+    $('.duration').text(`Expected Drive Time: ${duration}`);
+}
 /**
  * this function calculates the distance of two points
  * @param result, distance of two destinations
@@ -354,10 +377,16 @@ function computeTotalDistance(result) {
 function listFoodLocations(array){
     
     for(let index = 0;index < array.length; index++){
-        let foodEstablishmentName = $('<li>').text(`${labels[index]}. ${array[index].name}`);
-        $('.placesList').append(foodEstablishmentName);
+        
+        let foodEstablishmentListing = $('<li>').text(`${labels[index]}.`).attr('data-id', `marker-${index}`).css('background-color','red');
+        let establishmentName = $('<p>').text(` ${array[index].name}`).addClass('black-text');
+        foodEstablishmentListing.append(establishmentName);
+        $('.marker-list').append(foodEstablishmentListing);
     }
-
+    $(".marker-list li").on('click', function() {
+        var id = $(this).attr( 'data-id' );
+        infoWindow.open( map, markerMap[ id ] );
+        }); 
 }
 
 /**
@@ -495,6 +524,7 @@ function getYelpDetails (id) {
  * Function the displays the data to dom dynamically
  */
 function createYelpDisplay(response) {
+    console.log("Response", response);
     let name = response.name;
     $(".name").text(name);
     let phone = response.display_phone;
@@ -516,4 +546,5 @@ function createYelpDisplay(response) {
         $('.openOrClosed').text("CLOSED").css('color','red');
     }
     $("#goThere").addClass("scale-in");
+    let yelpReview = $('.yelpLink').attr('target',"_blank").attr('href',response.url);
 }
