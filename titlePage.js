@@ -3,6 +3,8 @@ $(document).ready(initializeApp);
 let foodInput = null;
 let food = null;
 let userPosition = {lat:0,lng:0};
+var labels = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+var labelIndex = 0;
 /**
  * apply click handlers once document is ready
  * @param {}
@@ -246,11 +248,11 @@ function initAutocomplete() {
                 content: `${place.name} <br> Rating: ${place.rating} `,
                 pixelOffset: new google.maps.Size(0, 0)
             });
-           
-
+            
             let markerLocation = new google.maps.Marker({
                 map: map,
-                icon: 'http://maps.google.com/mapfiles/ms/icons/orange-dot.png',
+                // icon: 'http://maps.google.com/mapfiles/ms/icons/orange-dot.png',
+                label: labels[labelIndex++ % labels.length],
                 title: place.name,
                 position: place.geometry.location
             });
@@ -308,7 +310,6 @@ function displayRoute(origin, destination) {
     $("#direction").empty();
     let service = new google.maps.DirectionsService;
     let display = new google.maps.DirectionsRenderer({
-
         draggable: true,
         map: map,
         panel: document.getElementById('direction')
@@ -320,7 +321,7 @@ function displayRoute(origin, destination) {
         travelMode: 'DRIVING',
         avoidTolls: true
     }, function(response, status) {
-      
+      console.log("directions response",response);
         if (status === 'OK') {
             if (previousRoute){
                 //here we set previous route to null so it clears the previous route
@@ -353,7 +354,7 @@ function computeTotalDistance(result) {
 function listFoodLocations(array){
     
     for(let index = 0;index < array.length; index++){
-        let foodEstablishmentName = $('<li>').text(`${index +1}. ${array[index].name}`);
+        let foodEstablishmentName = $('<li>').text(`${labels[index]}. ${array[index].name}`);
         $('.placesList').append(foodEstablishmentName);
     }
 
