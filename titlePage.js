@@ -353,7 +353,7 @@ function computeTotalDistance(result) {
 function listFoodLocations(array){
     
     for(let index = 0;index < array.length; index++){
-        let foodEstablishmentName = $('<li>').text(`${index +1}. ${array[index].name});
+        let foodEstablishmentName = $('<li>').text(`${index +1}. ${array[index].name}`);
         $('.placesList').append(foodEstablishmentName);
     }
 
