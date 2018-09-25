@@ -64,7 +64,7 @@
         </div>
         <div class="row">
   
-          <div class="col s10 offset-s1 m7 mapAndPicContainer">
+          <div class="col s10 offset-s1 m6 mapAndPicContainer">
             <div id="foodName"></div>
             <div id="mapAndPic">
               <div id="pic"></div>
@@ -76,40 +76,47 @@
             <button class="btn right-align scale-transition scale-out waves-effect waves-light" id="goThere">Get me there!</button>
             </div>
           </div>
-    
-          <div class="col s10 offset-s1 m4 offset-m1">
-              <div class = "nutrition">
-                  <div>Nutrition Facts</div>
-                <div class="nutritionTitles">
-                    <div>Serving size
-                      <div class="serving right-align"></div>
-                    </div>
-                    <div>Calories
-                        <div class="calories right-align"></div>
-                    </div>
-                    <div>Carbohydrate
-                        <div class="carbohydrate right-align"></div>
-                    </div>
-                    <div>Protein
-                        <div class="protein right-align"></div>
-                    </div>
-                    <div>Fat
-                        <div class="fat right-align"></div>
-                    </div>
-                    <div>Sugar
-                        <div class="sugar right-align"></div>
-                    </div>
-                    <div>Sodium
-                        <div class="sodium right-align"></div>
-                    </div>
-                    <div>Cholesterol
+          <div class="tabsBar col s10 offset-s1 m6">
+            <div>
+                <ul class="tabs">
+                    <li class="tab col s4" id="nutritionTab" onclick="showNutrition()">Nutrition</li>
+                    <li class="tab col s4" id="locationsTab" onclick="showLocations()">Locations</li>
+                    <li class ="tab col s4" id="restaurantTab" onclick="showRestaurantInfo()">Details</li>
+                </ul>
+            </div>
+                <div class = "nutrition">
+                    <div>Nutrition Facts</div>
+                    <div class="nutritionTitles">
+                        <div>Serving size
+                            <div class="serving right-align"></div>
+                        </div>
+                        <div>Calories
+                            <div class="calories right-align"></div>
+                        </div>
+                        <div>Carbohydrate
+                            <div class="carbohydrate right-align"></div>
+                        </div>
+                        <div>Protein
+                            <div class="protein right-align"></div>
+                        </div>
+                        <div>Fat
+                            <div class="fat right-align"></div>
+                        </div>
+                        <div>Sugar
+                            <div class="sugar right-align"></div>
+                        </div>
+                        <div>Sodium
+                            <div class="sodium right-align"></div>
+                        </div>
+                        <div>Cholesterol
                         <div class="cholesterol right-align"></div>
+                        </div>
                     </div>
                 </div>
-              </div>
-              <div class = "yelp container">
+              
+              <div class = "yelp container" id="restaurantInfo">
                   <div class="row">
-                    <div class="yelpImageContainer">
+                    <div class="yelpImageContainer hide-on-small-only">
                       <img id="yelpImage" src="img/turtle_pizza.jpg">
                     </div>
                     <div class="yelpTitle nav-wrapper orange">
@@ -128,14 +135,16 @@
                     </div>
                   </div>
                 </div>
+                <div class="placesContainer" id="locations">
+                        <ul class ="marker-list">
+                
+                        </ul>
+                </div>
+          </div>
           </div>
         </div>
       </div>
-    <div class="placesContainer">
-        <ul class ="marker-list">
-
-        </ul>
-    </div>
+   
       
     <div id="directionModal" class="modal">
       <div class="modal-content">
