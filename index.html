@@ -53,7 +53,15 @@
                     <input value="Search" class="btn orange submit" id="search">
                 </div>
             </form>
-            <button class="btn" type = 'button' id="enableGeo">Enable Current Location</button>
+            <button class="btn pulse" type = 'button' id="enableGeo">Enable Current Location</button>
+            <div class="btn purple" id="geoModalTrigger">Why?</div>
+            <div class="modalContainer" id="geoModal">
+                <div class="modalHeader">Why you should enable your Geolocation</div>
+                <p>To experience all the benefits of the Steady Eats Application please enable your geolocation data by clicking the 'Enable Geolocation' button and allowing your location to be shared. This App uses your current location to find nearby restaurants and stores.
+                        Your location is what determines the center of the map, and the origin point for driving location, distance, and duration. 
+                </p>
+            </div>
+          
         </div>
     </div>
     
@@ -80,7 +88,7 @@
             <div>
                 <ul class="tabs">
                     <li class="tab col s4" id="nutritionTab" onclick="showNutrition()">Nutrition</li>
-                    <li class="tab col s4" id="locationsTab" onclick="showLocations()">Locations</li>
+                    <li class="tab col s4" id="locationsTab" onclick="showLocationsList()">Locations</li>
                     <li class ="tab col s4" id="restaurantTab" onclick="showRestaurantInfo()">Details</li>
                 </ul>
             </div>
@@ -119,6 +127,8 @@
                     <div class="yelpImageContainer hide-on-small-only">
                       <img id="yelpImage" src="img/turtle_pizza.jpg">
                     </div>
+                    </div>
+                    <div class="yelpContainer row">
                     <div class="yelpTitle nav-wrapper orange">
                       <div class="name"></div>
                       <div class="reviews"></div>
@@ -133,7 +143,7 @@
                       <div class="serviceType"></div>
                       <a class="yelpLink">Yelp Review</a>
                     </div>
-                  </div>
+                    </div>
                 </div>
                 <div class="placesContainer" id="locations">
                         <ul class ="marker-list">
@@ -155,7 +165,7 @@
           </div>
       </div>
       <div class="modal-footer">
-          <button class="okBtn"><span>OK</span></button>
+          <button class="okBtn btn red">X</button>
       </div>
     </div>
     <!-- <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDe0jP6VmIcm9DPFzxzRGV7cWgkVBbCSIU&libraries=places&callback=initAutocomplete"></script>     -->

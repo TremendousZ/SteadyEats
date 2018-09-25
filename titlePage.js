@@ -17,41 +17,6 @@ function initializeApp () {
 }
 
 /**
- * autofill complete
- */
-// $(function() {
-//     $('#food').autocomplete({
-//         // can ajax nutri api for list, but unable too
-//       data: {
-//         "Apple": null,
-//         "Chicken": null,
-//         "Taco": null,
-//         "Wings": null,
-//         "Burritos": null,
-//         "Cake": null,
-//         "Rice": null,
-//         "Pizza": null,
-//         "Curry": null,
-//         "Orange": null,
-//         "Beer": null,
-//         "Wine": null,
-//         "Burger": null,
-//         "Fish": null,
-//         "Ice Cream": null,
-//         "Strawberry": null,
-//         "Cheese": null,
-//         "Bread": null,
-//         "Chips": null,
-//         "Salsa": null,
-//         "String cheese": null,
-//         "Tofu": null,
-//         "Salad": null,
-//         "Ramen": null,
-//       }
-//     });
-// });
-
-/**
  * Applies click handler to the submit button
  */
 function addClickHandler () {
@@ -65,7 +30,8 @@ function addClickHandler () {
     $('#restaurantTab').click(showRestaurantInfo);
     $("#pac-input").hide();
     modalActivity();
-
+    $('#geoModalTrigger').click(showModal);
+    $('#titlePage').click(removeIntroModal);
     //when enter is pressed
     $(document).keyup(function(event) {
         if ($("#food").is(":focus") && event.key == "Enter") {
@@ -80,7 +46,7 @@ function addClickHandler () {
  */
 function submitClicked () { 
     food = $("#food").val()
-    console.log(food);
+    initAutocomplete();
     changePage();
 }
 
@@ -89,7 +55,7 @@ function submitClicked () {
  */
 function changePage () {
     $('#titlePage').addClass('hide');
-    $('.foodPage').addClass('show');
+    $('.foodPage').addClass('show').removeClass('hide');
     nutritionCallFromServer(food);
     showNutrition();
     // location.assign("food.html")
@@ -107,8 +73,7 @@ function enableGeolocation(){
                 lng: position.coords.longitude
         }
         userPosition = pos;
-        console.log("This User Position:",pos);
-        initAutocomplete();
+        $('#enableGeo').removeClass('pulse');
     })
 }
 }
@@ -146,7 +111,6 @@ function modalActivity(){
         }
     }
 }
-
 
 /**
  * Make a function to autosubmit the input data
@@ -397,8 +361,21 @@ function listFoodLocations(array){
  * back to first screen
  */
 function startOver(){ 
-    location.assign("index.html");
-    sessionStorage("setFood", "");
+    $('#titlePage').addClass('show').removeClass('hide');
+    $('.foodPage').addClass('hide').removeClass('show');
+    $('#pic').show();
+    $('#map').hide();
+    $('#findMore').show();
+    // $('#food').addClass('show').removeClass('hide');
+    var foodInput = $('<input>', {
+        class: "center-align white autocomplete",
+        id: "food",
+        placeholder: "type food item here",
+        type: "text"
+    });
+    $('.formSection').prepend(foodInput);
+    $('.marker-list').empty();
+
 }
 
 /**
@@ -577,4 +554,13 @@ function showRestaurantInfo(){
     $('#locationsTab').removeClass('selected');
     $('#nutrition').removeClass('selected');
     $('#restaurantTab').addClass('selected');
+}
+
+function showModal(){
+    event.stopPropagation();
+    $('.modalContainer').addClass('show');  
+}
+
+function removeIntroModal(){
+    $('.modalContainer').removeClass('show');
 }
