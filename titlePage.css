@@ -149,10 +149,6 @@ body {
     width: 70%
   }
   
-  .nutrition {
-    margin-top: 5%;
-  }
-  
   .nutritionTitles {
     display: inline-block;
     width: 100%;
@@ -280,15 +276,19 @@ body {
     color: white;
   }
   
-  .show{
-    display:block;
+ 
+  .nutrition,#restaurantInfo,#locations{
+    display: none;
+    margin-top:5%;
   }
 
-  .placesContainer{
-      position: absolute;
-      left:0;
-      top:0;
-      width:15%;
+  .show{
+    display:block !important;
+  }
+  .selected{
+    background-color: #ff9800;
+    color: black;
+    font-weight: 400;
   }
   
   @media only screen and (max-width: 600px) {
@@ -323,4 +323,7 @@ body {
     top:0%;
   }
   
+  .tabsBar{
+    margin-top:2%;
+  }
   }

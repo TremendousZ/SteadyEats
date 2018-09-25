@@ -60,6 +60,9 @@ function addClickHandler () {
     $("#findMore").click(showMap);
     $("#reset").click(startOver);
     $("#logo").click(startOver);
+    $('#nutritionTab').click(showNutrition);
+    $('#locationsTab').click(showLocationList);
+    $('#restaurantTab').click(showRestaurantInfo);
     $("#pac-input").hide();
     modalActivity();
 
@@ -88,7 +91,7 @@ function changePage () {
     $('#titlePage').addClass('hide');
     $('.foodPage').addClass('show');
     nutritionCallFromServer(food);
-    
+    showNutrition();
     // location.assign("food.html")
 }
 /**
@@ -169,7 +172,7 @@ function submitFormData () {
  * set a timeout to submit the form data after a short delay 1 second
  */
 function showMap(){
-   
+  showLocationList();
   $("#pic").hide();
   $("#map").show();
   $("#findMore").hide();
@@ -266,7 +269,7 @@ function initAutocomplete() {
 
             function openInfoAndDisplayRoute() {
                 previousInfoWindow.close();
-               
+                showRestaurantInfo();
                 infoWindow.open(map, marker);
                 previousInfoWindow = infoWindow;
                 // break the address up into street address , cit
@@ -547,4 +550,31 @@ function createYelpDisplay(response) {
     }
     $("#goThere").addClass("scale-in");
     let yelpReview = $('.yelpLink').attr('target',"_blank").attr('href',response.url);
+}
+
+function showNutrition(){
+    $('#restaurantInfo').removeClass('show');
+    $('#locations').removeClass('show');
+    $('.nutrition').addClass('show');
+    $('#locationsTab').removeClass('selected');
+    $('#restaurantTab').removeClass('selected');
+    $('#nutritionTab').addClass("selected");
+}
+
+function showLocationList(){
+    $('#restaurantInfo').removeClass('show');
+    $('.nutrition').removeClass('show');
+    $('#locations').addClass('show');
+    $('#nutritionTab').removeClass('selected');
+    $('#restaurantTab').removeClass('selected');
+    $('#locationsTab').addClass('selected');
+}
+
+function showRestaurantInfo(){
+    $('.nutrition').removeClass('show');
+    $('#locations').removeClass('show');
+    $('#restaurantInfo').addClass('show');
+    $('#locationsTab').removeClass('selected');
+    $('#nutrition').removeClass('selected');
+    $('#restaurantTab').addClass('selected');
 }
