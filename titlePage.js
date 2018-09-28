@@ -6,6 +6,7 @@ let userPosition = {lat:0,lng:0};
 var labels = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
 var labelIndex = 0;
 var markerMap = {}
+var mapGenerated = false;
 /**
  * apply click handlers once document is ready
  * @param {}
@@ -32,18 +33,21 @@ function addClickHandler () {
     modalActivity();
     $('#geoModalTrigger').click(showModal);
     $('#titlePage').click(removeIntroModal);
-    //when enter is pressed
-    $(document).keyup(function(event) {
-        if ($("#food").is(":focus") && event.key == "Enter") {
-            retrieveInput();
-            changePage();
-        }
-    });
+    pressEnterToSubmit();
 }
 
 /**
  * Once user presses submit, get input and change page
  */
+function pressEnterToSubmit(){
+    document.getElementById('food').onkeydown = function(e){
+        if(e.keyCode == 13){
+            submitClicked();
+        }
+    };
+}
+
+
 function submitClicked () { 
     food = $("#food").val()
     initAutocomplete();
@@ -58,6 +62,7 @@ function changePage () {
     $('.foodPage').addClass('show').removeClass('hide');
     nutritionCallFromServer(food);
     showNutrition();
+    $("#userFoodSubmission").text(food);
     // location.assign("food.html")
 }
 /**
@@ -73,6 +78,7 @@ function enableGeolocation(){
                 lng: position.coords.longitude
         }
         userPosition = pos;
+        console.log(pos);
         $('#enableGeo').removeClass('pulse');
     })
 }
@@ -136,6 +142,7 @@ function submitFormData () {
  * set a timeout to submit the form data after a short delay 1 second
  */
 function showMap(){
+  mapGenerated = true;
   showLocationList();
   $("#pic").hide();
   $("#map").show();
@@ -366,16 +373,22 @@ function startOver(){
     $('#pic').show();
     $('#map').hide();
     $('#findMore').show();
-    // $('#food').addClass('show').removeClass('hide');
+    if(mapGenerated){
+        recreateSearchBar();
+    }
+    mapGenerated=false;
+    $('.marker-list').empty();
+}
+
+function recreateSearchBar(){
     var foodInput = $('<input>', {
         class: "center-align white autocomplete",
         id: "food",
         placeholder: "type food item here",
         type: "text"
     });
+    pressEnterToSubmit();
     $('.formSection').prepend(foodInput);
-    $('.marker-list').empty();
-
 }
 
 /**
@@ -402,7 +415,12 @@ function nutritionCallFromServer(){
        },
        method: 'post',
        success: function(response) {
+           debugger;
+           console.log("This response to find pics",response);
            let src = response.foods[0].photo.highres;
+           if( src === null){
+               src = "./img/image_not_available.gif";
+           }
            let img = $('<img>').attr('src', src);
            
            $('#pic').html(img);
