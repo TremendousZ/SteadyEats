@@ -26,9 +26,9 @@ function addClickHandler () {
     $("#findMore").click(showMap);
     $("#reset").click(startOver);
     $("#logo").click(startOver);
-    $('#nutritionTab').click(showNutrition);
-    $('#locationsTab').click(showLocationList);
-    $('#restaurantTab').click(showRestaurantInfo);
+    // $('#nutritionTab').click(showNutrition);
+    // $('#locationsTab').click(showLocationList);
+    // $('#restaurantTab').click(showRestaurantInfo);
     $("#pac-input").hide();
     modalActivity();
     $('#geoModalTrigger').click(showModal);
@@ -62,6 +62,8 @@ function changePage () {
     $('.foodPage').addClass('show').removeClass('hide');
     nutritionCallFromServer(food);
     showNutrition();
+    $('#locationsTab').addClass('disabledTab');
+    $('#restaurantTab').addClass('disabledTab');
     $("#userFoodSubmission").text(food);
     // location.assign("food.html")
 }
@@ -209,6 +211,8 @@ function initAutocomplete() {
         console.log("Places:", places);
         // listFoodLocations(places);
         if (places.length == 0) {
+            let noRestaurantFound = $('<li>').text("No locations found");
+            $('.marker-list').append(noRestaurantFound);
             return;
         }
         // Clear out the old markers.
@@ -220,6 +224,7 @@ function initAutocomplete() {
         let bounds = new google.maps.LatLngBounds();
         places.forEach(function(place, index) {
             if (!place.geometry) {
+               
                 return;
             }
 
@@ -254,13 +259,13 @@ function initAutocomplete() {
                 requestYelpData(name , address, cityName);
                 displayRoute( '', place.formatted_address);
             }
-
+            
             let foodEstablishmentName = $('<li>').text(`${labels[index]}. ${place.name}`).attr('data-id', `marker-${index}`);
             foodEstablishmentName.on('click', openInfoAndDisplayRoute);
             $('.marker-list').append(foodEstablishmentName);
             // Create a marker for each place.
             markers.push(marker);
-
+            
             if (place.geometry.viewport) {
                 bounds.union(place.geometry.viewport);
             } else {
@@ -349,7 +354,11 @@ function computeTotalDistance(result) {
 }
 
 function listFoodLocations(array){
-    
+    debugger;
+    if (array.length == 0){
+        let noRestaurantFound = $('<li>').text("No locations found for this food");
+        $('.marker-list').append(noRestaurantFound);
+    } else {
     for(let index = 0;index < array.length; index++){
         
         let foodEstablishmentListing = $('<li>').text(`${labels[index]}.`).attr('data-id', `marker-${index}`).css('background-color','red');
@@ -361,6 +370,7 @@ function listFoodLocations(array){
         var id = $(this).attr( 'data-id' );
         infoWindow.open( map, markerMap[ id ] );
         }); 
+    }
 }
 
 /**
@@ -373,6 +383,8 @@ function startOver(){
     $('#pic').show();
     $('#map').hide();
     $('#findMore').show();
+    $('#restaurantTab').off('click');
+    $('#locationsTab').off('click');
     if(mapGenerated){
         recreateSearchBar();
     }
@@ -554,6 +566,7 @@ function showNutrition(){
     $('#locationsTab').removeClass('selected');
     $('#restaurantTab').removeClass('selected');
     $('#nutritionTab').addClass("selected");
+    $('#nutritionTab').on('click',showNutrition);
 }
 
 function showLocationList(){
@@ -562,7 +575,8 @@ function showLocationList(){
     $('#locations').addClass('show');
     $('#nutritionTab').removeClass('selected');
     $('#restaurantTab').removeClass('selected');
-    $('#locationsTab').addClass('selected');
+    $('#locationsTab').addClass('selected').removeClass('disabledTab');
+    $('#locationsTab').on('click',showLocationList);
 }
 
 function showRestaurantInfo(){
@@ -571,7 +585,8 @@ function showRestaurantInfo(){
     $('#restaurantInfo').addClass('show');
     $('#locationsTab').removeClass('selected');
     $('#nutrition').removeClass('selected');
-    $('#restaurantTab').addClass('selected');
+    $('#restaurantTab').addClass('selected').removeClass('disabledTab');
+    $('#restaurantTab').on('click',showRestaurantInfo);
 }
 
 function showModal(){
