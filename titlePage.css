@@ -41,6 +41,10 @@ body {
     display: none;
 }
 
+.disabledTab{
+  background-color: lightgray;
+  color: #999;
+}
 
 .show{
     display:block;
