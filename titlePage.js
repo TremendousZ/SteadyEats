@@ -15,6 +15,7 @@ function initializeApp () {
     addClickHandler();
     $(".submit").addClass("scale-in");
     $("#reset").addClass("scale-in");
+    
 }
 
 /**
@@ -114,7 +115,7 @@ function modalActivity(){
         $('.modal').hide();
     });
     window.onclick = function(event) {
-        if (event.target == modal) {
+        if (event.target !== modal) {
             $('.modal').hide();
         }
     }
@@ -253,7 +254,8 @@ function initAutocomplete() {
                 const address = arrayOfString[0];
                 const cityName = arrayOfString[1];
                 const name = place.name;
-                
+                //send name to 
+                loveIt(name);
                 // send the relevant data to make the Yelp ajax call
                 // send the relevant info to Google Directions
                 requestYelpData(name , address, cityName);
@@ -556,6 +558,7 @@ function createYelpDisplay(response) {
         $('.openOrClosed').text("CLOSED").css('color','red');
     }
     $("#goThere").addClass("scale-in");
+    $("#loveIt").addClass("scale-in");
     let yelpReview = $('.yelpLink').attr('target',"_blank").attr('href',response.url);
 }
 
@@ -596,4 +599,15 @@ function showModal(){
 
 function removeIntroModal(){
     $('.modalContainer').removeClass('show');
+}
+
+function loveIt(restaurantName){
+    $('#loveIt').on('click', ()=>{
+        let favoritesArray, localStorageString;
+        localStorageString = localStorage.getItem("favoritesArray");
+        favoritesArray = localStorageString.split(',');
+        favoritesArray.push(restaurantName);
+        favoritesArray.join(',');
+        localStorage.setItem("favoritesArray", favoritesArray);  
+    })  
 }
