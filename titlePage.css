@@ -152,8 +152,8 @@ body {
 
   #question{
     position: relative;
-    left:75%;
-    transform: translateX(-50%);
+    left:10%;
+    margin:2%;
   }
   
   .nutritionTitles {
@@ -194,6 +194,10 @@ body {
     border: none;
     border-radius: 10px;
     box-shadow: 0 3px #999;
+  }
+
+  #loveIt{
+    border-radius: 10px;
   }
   
   #findMore:hover {
