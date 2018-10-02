@@ -322,10 +322,7 @@ body {
   #nutritionTab, #locationsTab {
     border-right: 1px solid black;
   }
-  .marker-list{
-    margin-left:33%;
-  }
-
+  
   .okBtn{
     position: absolute;
     top:2%;
