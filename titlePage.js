@@ -27,9 +27,6 @@ function addClickHandler () {
     $("#findMore").click(showMap);
     $("#reset").click(startOver);
     $("#logo").click(startOver);
-    // $('#nutritionTab').click(showNutrition);
-    // $('#locationsTab').click(showLocationList);
-    // $('#restaurantTab').click(showRestaurantInfo);
     $("#pac-input").hide();
     modalActivity();
     $('#geoModalTrigger').click(showModal);
@@ -66,7 +63,6 @@ function changePage () {
     $('#locationsTab').addClass('disabledTab');
     $('#restaurantTab').addClass('disabledTab');
     $("#userFoodSubmission").text(food);
-    // location.assign("food.html")
 }
 /**
  * Will use session storage to get user
@@ -166,15 +162,6 @@ function initAutocomplete() {
     });
 
     infoWindow = new google.maps.InfoWindow;
-
-    //this is gives us the current location
-    // if (navigator.geolocation) {
-    //     navigator.geolocation.getCurrentPosition(function(position) {
-    //         const pos = {
-    //             lat: position.coords.latitude,
-    //             lng: position.coords.longitude
-    //         };
-
             infoWindow.setPosition(userPosition);
             infoWindow.setContent('You are Here');
             infoWindow.open(map);
@@ -183,11 +170,7 @@ function initAutocomplete() {
             () => {
             handleLocationError(true, infoWindow, map.getCenter());
         };
-    // } else {
-    //     // Browser doesn't support Geolocation
-    //     handleLocationError(false, infoWindow, map.getCenter());
-    // }
-
+   
     // Create the search box and link it to the search bar element with the id of pac-input.
     let input = document.getElementById('food');
     let searchBox = new google.maps.places.SearchBox(input);
@@ -362,7 +345,6 @@ function listFoodLocations(array){
         $('.marker-list').append(noRestaurantFound);
     } else {
     for(let index = 0;index < array.length; index++){
-        
         let foodEstablishmentListing = $('<li>').text(`${labels[index]}.`).attr('data-id', `marker-${index}`).css('background-color','red');
         let establishmentName = $('<p>').text(` ${array[index].name}`).addClass('black-text');
         foodEstablishmentListing.append(establishmentName);
@@ -401,8 +383,8 @@ function recreateSearchBar(){
         placeholder: "type food item here",
         type: "text"
     });
-    pressEnterToSubmit();
     $('.formSection').prepend(foodInput);
+    pressEnterToSubmit();
 }
 
 /**
