@@ -244,8 +244,20 @@ function initAutocomplete() {
                 requestYelpData(name , address, cityName);
                 displayRoute( '', place.formatted_address);
             }
-            
-            let foodEstablishmentName = $('<li>').text(`${labels[index]}. ${place.name}`).attr('data-id', `marker-${index}`);
+            // Get the Favorites string from local storage and covert it into an array
+            let favoritesArray, localStorageString, foodEstablishmentName;
+            localStorageString = localStorage.getItem("favoritesArray");
+            favoritesArray = localStorageString.split(',');
+            // Get the location Name
+            let locationName = place.name;
+
+            if(favoritesArray.includes(locationName)){
+                let favoriteSymbol = $('<i>').addClass("material-icons favIcon pink darken-2").text("favorite");
+                foodEstablishmentName = $('<li>').text(`${labels[index]}. ${place.name}`).attr('data-id', `marker-${index}`);
+                foodEstablishmentName.append(favoriteSymbol);
+            } else {
+                foodEstablishmentName = $('<li>').text(`${labels[index]}. ${place.name}`).attr('data-id', `marker-${index}`);
+            }
             foodEstablishmentName.on('click', openInfoAndDisplayRoute);
             $('.marker-list').append(foodEstablishmentName);
             // Create a marker for each place.
@@ -339,16 +351,27 @@ function computeTotalDistance(result) {
 }
 
 function listFoodLocations(array){
-    debugger;
+    let favoritesArray, localStorageString;
+        localStorageString = localStorage.getItem("favoritesArray");
+        favoritesArray = localStorageString.split(',');
     if (array.length == 0){
         let noRestaurantFound = $('<li>').text("No locations found for this food");
         $('.marker-list').append(noRestaurantFound);
     } else {
     for(let index = 0;index < array.length; index++){
-        let foodEstablishmentListing = $('<li>').text(`${labels[index]}.`).attr('data-id', `marker-${index}`).css('background-color','red');
+        let locationName = array[index].name;
+        let foodEstablishmentListing = $('<li>').text(`${labels[index]}.`).attr('data-id', `marker-${index}`);
         let establishmentName = $('<p>').text(` ${array[index].name}`).addClass('black-text');
-        foodEstablishmentListing.append(establishmentName);
+        debugger;
+        console.log("ARRAY AND NAME", favoritesArray, locationName);
+        if(favoritesArray.includes(locationName)){
+            let favoriteSymbol = $('<div>').text("Fav").addClass("glyphicon glyphicon-heart");
+            foodEstablishmentListing.append(establishmentName, favoriteSymbol);
+            $('.marker-list').append(foodEstablishmentListing);
+        }else {
+            foodEstablishmentListing.append(establishmentName);
         $('.marker-list').append(foodEstablishmentListing);
+        }
     }
     $(".marker-list li").on('click', function() {
         var id = $(this).attr( 'data-id' );
@@ -411,8 +434,6 @@ function nutritionCallFromServer(){
        },
        method: 'post',
        success: function(response) {
-           debugger;
-           console.log("This response to find pics",response);
            let src = response.foods[0].photo.highres;
            if( src === null){
                src = "./img/image_not_available.gif";
@@ -588,6 +609,7 @@ function loveIt(restaurantName){
         let favoritesArray, localStorageString;
         localStorageString = localStorage.getItem("favoritesArray");
         favoritesArray = localStorageString.split(',');
+        console.log("Favorites Array", favoritesArray);
         favoritesArray.push(restaurantName);
         favoritesArray.join(',');
         localStorage.setItem("favoritesArray", favoritesArray);  
