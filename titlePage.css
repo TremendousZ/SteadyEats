@@ -47,7 +47,7 @@ body {
 }
 
 .show{
-    display:block;
+    display:block !important;
 }
 
 .hide{
@@ -196,8 +196,12 @@ body {
     box-shadow: 0 3px #999;
   }
 
-  #loveIt{
+  .favoriteButtonContainer{
+    position: relative;
+  }
+  .loveIt, .removeFav{
     border-radius: 10px;
+    position: absolute;
   }
   
   #findMore:hover {
