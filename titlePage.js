@@ -196,7 +196,6 @@ function initAutocomplete() {
     searchBox.addListener('places_changed', function() {
       let places = searchBox.getPlaces();
         console.log("Places:", places);
-        // listFoodLocations(places);
         if (places.length == 0) {
             let noRestaurantFound = $('<li>').text("No locations found");
             $('.marker-list').append(noRestaurantFound);
@@ -207,7 +206,6 @@ function initAutocomplete() {
             marker.setMap(null);
         });
         markers = [];
-        console.log("Markers:" , markers);
         let bounds = new google.maps.LatLngBounds();
         places.forEach(function(place, index) {
             if (!place.geometry) {
@@ -216,13 +214,12 @@ function initAutocomplete() {
             }
 
             let infoWindow = new google.maps.InfoWindow({
-                content: `${place.name} <br> Rating: ${place.rating} `,
+                content: `${place.name}`,
                 pixelOffset: new google.maps.Size(0, 0)
             });
             markerMap[ "marker-" + labelIndex ] = marker 
             var marker = new google.maps.Marker({
                 map: map,
-                // icon: 'http://maps.google.com/mapfiles/ms/icons/orange-dot.png',
                 label: labels[labelIndex++ % labels.length],
                 title: place.name,
                 position: place.geometry.location
@@ -396,6 +393,9 @@ function startOver(){
     $('#findMore').show();
     $('#restaurantTab').off('click');
     $('#locationsTab').off('click');
+    $('.loveIt').removeClass("scale-in");
+    $('.removeFav').removeClass("scale-in");
+    $('#goThere').removeClass("scale-in");
     if(mapGenerated){
         recreateSearchBar();
     }
