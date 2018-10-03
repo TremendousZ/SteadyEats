@@ -35,7 +35,7 @@ function addClickHandler () {
 }
 
 /**
- * Once user presses submit, get input and change page
+ * If use presses enter, submit entry
  */
 function pressEnterToSubmit(){
     document.getElementById('food').onkeydown = function(e){
@@ -45,6 +45,9 @@ function pressEnterToSubmit(){
     };
 }
 
+/**
+ * Once user presses submit, get input and change page
+ */
 
 function submitClicked () { 
     food = $("#food").val()
@@ -53,7 +56,7 @@ function submitClicked () {
 }
 
 /**
- *  Changes the page  
+ *  Changes the page,  
  */
 function changePage () {
     $('#titlePage').addClass('hide');
@@ -105,16 +108,16 @@ let previousRoute = false;
 function modalActivity(){
     let modal = document.getElementById('directionModal');
     $('#goThere').click(function(){
-        $('.modal').show();
+        $('.modal').addClass("show");
     });
     $('.okBtn').click(function(){
-        $('.modal').hide();
+        $('.modal').removeClass("show");
     });
-    window.onclick = function(event) {
-        if (event.target !== modal) {
-            $('.modal').hide();
-        }
-    }
+    // window.onclick = function(event) {
+    //     if (event.target !== modal) {
+    //         $('.modal').removeClass("show");
+    //     }
+    // }
 }
 
 /**
@@ -239,6 +242,7 @@ function initAutocomplete() {
                 const name = place.name;
                 //send name to 
                 loveIt(name);
+                removeFromFavorites(name);
                 // send the relevant data to make the Yelp ajax call
                 // send the relevant info to Google Directions
                 requestYelpData(name , address, cityName);
@@ -252,7 +256,7 @@ function initAutocomplete() {
             let locationName = place.name;
 
             if(favoritesArray.includes(locationName)){
-                let favoriteSymbol = $('<i>').addClass("material-icons favIcon pink darken-2").text("favorite");
+                let favoriteSymbol = $('<i>').addClass("material-icons favIcon pink-text darken-2").text("favorite");
                 foodEstablishmentName = $('<li>').text(`${labels[index]}. ${place.name}`).attr('data-id', `marker-${index}`);
                 foodEstablishmentName.append(favoriteSymbol);
             } else {
@@ -350,35 +354,35 @@ function computeTotalDistance(result) {
     document.getElementById('total').innerHTML = total + ' km';
 }
 
-function listFoodLocations(array){
-    let favoritesArray, localStorageString;
-        localStorageString = localStorage.getItem("favoritesArray");
-        favoritesArray = localStorageString.split(',');
-    if (array.length == 0){
-        let noRestaurantFound = $('<li>').text("No locations found for this food");
-        $('.marker-list').append(noRestaurantFound);
-    } else {
-    for(let index = 0;index < array.length; index++){
-        let locationName = array[index].name;
-        let foodEstablishmentListing = $('<li>').text(`${labels[index]}.`).attr('data-id', `marker-${index}`);
-        let establishmentName = $('<p>').text(` ${array[index].name}`).addClass('black-text');
-        debugger;
-        console.log("ARRAY AND NAME", favoritesArray, locationName);
-        if(favoritesArray.includes(locationName)){
-            let favoriteSymbol = $('<div>').text("Fav").addClass("glyphicon glyphicon-heart");
-            foodEstablishmentListing.append(establishmentName, favoriteSymbol);
-            $('.marker-list').append(foodEstablishmentListing);
-        }else {
-            foodEstablishmentListing.append(establishmentName);
-        $('.marker-list').append(foodEstablishmentListing);
-        }
-    }
-    $(".marker-list li").on('click', function() {
-        var id = $(this).attr( 'data-id' );
-        infoWindow.open( map, markerMap[ id ] );
-        }); 
-    }
-}
+// function listFoodLocations(array){
+//     let favoritesArray, localStorageString;
+//         localStorageString = localStorage.getItem("favoritesArray");
+//         favoritesArray = localStorageString.split(',');
+//     if (array.length == 0){
+//         let noRestaurantFound = $('<li>').text("No locations found for this food");
+//         $('.marker-list').append(noRestaurantFound);
+//     } else {
+//     for(let index = 0;index < array.length; index++){
+//         let locationName = array[index].name;
+//         let foodEstablishmentListing = $('<li>').text(`${labels[index]}.`).attr('data-id', `marker-${index}`);
+//         let establishmentName = $('<p>').text(` ${array[index].name}`).addClass('black-text');
+//         debugger;
+//         console.log("ARRAY AND NAME", favoritesArray, locationName);
+//         if(favoritesArray.includes(locationName)){
+//             let favoriteSymbol = $('<div>').text("Fav").addClass("glyphicon glyphicon-heart");
+//             foodEstablishmentListing.append(establishmentName, favoriteSymbol);
+//             $('.marker-list').append(foodEstablishmentListing);
+//         }else {
+//             foodEstablishmentListing.append(establishmentName);
+//         $('.marker-list').append(foodEstablishmentListing);
+//         }
+//     }
+//     $(".marker-list li").on('click', function() {
+//         var id = $(this).attr( 'data-id' );
+//         infoWindow.open( map, markerMap[ id ] );
+//         }); 
+//     }
+// }
 
 /**
  * callback function. when user presses start over button or logo button, go
@@ -561,7 +565,8 @@ function createYelpDisplay(response) {
         $('.openOrClosed').text("CLOSED").css('color','red');
     }
     $("#goThere").addClass("scale-in");
-    $("#loveIt").addClass("scale-in");
+    $(".loveIt").addClass("scale-in");
+    
     let yelpReview = $('.yelpLink').attr('target',"_blank").attr('href',response.url);
 }
 
@@ -605,13 +610,29 @@ function removeIntroModal(){
 }
 
 function loveIt(restaurantName){
-    $('#loveIt').on('click', ()=>{
+    $('.loveIt').on('click', ()=>{
         let favoritesArray, localStorageString;
         localStorageString = localStorage.getItem("favoritesArray");
         favoritesArray = localStorageString.split(',');
         console.log("Favorites Array", favoritesArray);
         favoritesArray.push(restaurantName);
         favoritesArray.join(',');
-        localStorage.setItem("favoritesArray", favoritesArray);  
+        localStorage.setItem("favoritesArray", favoritesArray);
+        $(".loveIt").removeClass("scale-in");
+        $('.removeFav').addClass("scale-in");  
     })  
+}
+
+function removeFromFavorites(restaurantName){
+    $('.removeFav').on('click',()=>{
+        let favoritesArray, localStorageString;
+        localStorageString = localStorage.getItem("favoritesArray");
+        favoritesArray = localStorageString.split(',');
+        let editedFavoritesArray = favoritesArray.filter(name => name !== restaurantName);
+        console.log("Check this array",editedFavoritesArray);
+        editedFavoritesArray.join(',');
+        localStorage.setItem("favoritesArray",editedFavoritesArray);
+        $(".removeFav").removeClass("scale-in");
+        $('.loveIt').addClass("scale-in");  
+    })
 }
