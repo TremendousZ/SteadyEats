@@ -2,7 +2,7 @@ $(document).ready(initializeApp);
 
 let foodInput = null;
 let food = null;
-let userPosition = {lat:0,lng:0};
+let userPosition = {lat:33.6846,lng:117.8265};
 var labels = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
 var labelIndex = 0;
 var markerMap = {}
@@ -16,7 +16,6 @@ function initializeApp () {
     addClickHandler();
     $(".submit").addClass("scale-in");
     $("#reset").addClass("scale-in");
-    
 }
 
 /**
@@ -245,7 +244,12 @@ function initAutocomplete() {
             // Get the Favorites string from local storage and covert it into an array
             let favoritesArray, localStorageString, foodEstablishmentName;
             localStorageString = localStorage.getItem("favoritesArray");
-            favoritesArray = localStorageString.split(',');
+            if (localStorageString === null){
+                favoritesArray = [];
+            } else {
+                favoritesArray = localStorageString.split(',');
+            }
+            
             // Get the location Name
             let locationName = place.name;
 
@@ -535,7 +539,12 @@ function createYelpDisplay(response) {
     debugger;
     let localStorageString,favoritesArray;
     localStorageString = localStorage.getItem("favoritesArray");
+    if (localStorageString === null){
+        favoritesArray = [];
+    } else {
         favoritesArray = localStorageString.split(',');
+    }
+        
     if(favoritesArray.includes(name)){
         $('.removeFav').addClass('scale-in')
     } else{
@@ -589,7 +598,11 @@ function loveIt(restaurantName){
     $('.loveIt').on('click', ()=>{
         let favoritesArray, localStorageString;
         localStorageString = localStorage.getItem("favoritesArray");
-        favoritesArray = localStorageString.split(',');
+        if (localStorageString === null){
+            localStorageString = [];
+        } else {
+            favoritesArray = localStorageString.split(',');
+        }
         console.log("Favorites Array", favoritesArray);
         favoritesArray.push(restaurantName);
         favoritesArray.join(',');
@@ -603,6 +616,11 @@ function removeFromFavorites(restaurantName){
     $('.removeFav').on('click',()=>{
         let favoritesArray, localStorageString;
         localStorageString = localStorage.getItem("favoritesArray");
+        if (localStorageString === null){
+            favoriteArray = [];
+        } else {
+            favoritesArray = localStorageString.split(',');
+        }
         favoritesArray = localStorageString.split(',');
         let editedFavoritesArray = favoritesArray.filter(name => name !== restaurantName);
         console.log("Check this array",editedFavoritesArray);
