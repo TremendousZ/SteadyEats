@@ -7,6 +7,7 @@ var labels = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
 var labelIndex = 0;
 var markerMap = {}
 var mapGenerated = false;
+let favoriteLocation = false;
 /**
  * apply click handlers once document is ready
  * @param {}
@@ -113,11 +114,7 @@ function modalActivity(){
     $('.okBtn').click(function(){
         $('.modal').removeClass("show");
     });
-    // window.onclick = function(event) {
-    //     if (event.target !== modal) {
-    //         $('.modal').removeClass("show");
-    //     }
-    // }
+    
 }
 
 /**
@@ -144,12 +141,12 @@ function submitFormData () {
  * set a timeout to submit the form data after a short delay 1 second
  */
 function showMap(){
-  mapGenerated = true;
-  showLocationList();
-  $("#pic").hide();
-  $("#map").show();
-  $("#findMore").hide();
-  submitFormData();
+    mapGenerated = true;
+    showLocationList();
+    $("#pic").hide();
+    $("#map").show();
+    $("#findMore").hide();
+    submitFormData();
 }
 
 /**
@@ -253,10 +250,12 @@ function initAutocomplete() {
             let locationName = place.name;
 
             if(favoritesArray.includes(locationName)){
+                favoriteLocation = true;
                 let favoriteSymbol = $('<i>').addClass("material-icons favIcon pink-text darken-2").text("favorite");
                 foodEstablishmentName = $('<li>').text(`${labels[index]}. ${place.name}`).attr('data-id', `marker-${index}`);
                 foodEstablishmentName.append(favoriteSymbol);
             } else {
+                favoriteLocation = false;
                 foodEstablishmentName = $('<li>').text(`${labels[index]}. ${place.name}`).attr('data-id', `marker-${index}`);
             }
             foodEstablishmentName.on('click', openInfoAndDisplayRoute);
@@ -314,7 +313,6 @@ function displayRoute(origin, destination) {
         },
         avoidTolls: true,
     }, function(response, status) {
-      console.log("directions response",response);
         if (status === 'OK') {
             let distance = response.routes[0].legs[0].distance.text
             let duration = response.routes[0].legs[0].duration.text
@@ -350,36 +348,6 @@ function computeTotalDistance(result) {
     // it displays in km, in future we will converting to miles
     document.getElementById('total').innerHTML = total + ' km';
 }
-
-// function listFoodLocations(array){
-//     let favoritesArray, localStorageString;
-//         localStorageString = localStorage.getItem("favoritesArray");
-//         favoritesArray = localStorageString.split(',');
-//     if (array.length == 0){
-//         let noRestaurantFound = $('<li>').text("No locations found for this food");
-//         $('.marker-list').append(noRestaurantFound);
-//     } else {
-//     for(let index = 0;index < array.length; index++){
-//         let locationName = array[index].name;
-//         let foodEstablishmentListing = $('<li>').text(`${labels[index]}.`).attr('data-id', `marker-${index}`);
-//         let establishmentName = $('<p>').text(` ${array[index].name}`).addClass('black-text');
-//         debugger;
-//         console.log("ARRAY AND NAME", favoritesArray, locationName);
-//         if(favoritesArray.includes(locationName)){
-//             let favoriteSymbol = $('<div>').text("Fav").addClass("glyphicon glyphicon-heart");
-//             foodEstablishmentListing.append(establishmentName, favoriteSymbol);
-//             $('.marker-list').append(foodEstablishmentListing);
-//         }else {
-//             foodEstablishmentListing.append(establishmentName);
-//         $('.marker-list').append(foodEstablishmentListing);
-//         }
-//     }
-//     $(".marker-list li").on('click', function() {
-//         var id = $(this).attr( 'data-id' );
-//         infoWindow.open( map, markerMap[ id ] );
-//         }); 
-//     }
-// }
 
 /**
  * callback function. when user presses start over button or logo button, go
@@ -477,8 +445,6 @@ function storeNutritionToDOM (foodObj) {
    $(".cholesterol").text(foodObj.nf_cholesterol + " mg");
 }
 
-// $(document).ready(initializeApp);
-// let foodItem = sessionStorage.setFood;
 let foodItem = null;
 let yelpResponse = null;
    
@@ -522,9 +488,10 @@ function requestYelpData (name, address, city) {
 function getYelpDetails (id) {
     let customUrl = "https://yelp.ongandy.com/businesses/details";
     let key = {
-        api_key: "9bPpnQ55-8I0jLR62WqbyvBAv20IJ-zF-WJs7YJgLqZeRqokQg2L995TrDHKUVXEmRblz6We2EMClsxkS4vbfmRLLP5G1cPcV5FFX0fzSi388ha6a1qsHR5J97dWW3Yx",
+        api_key: "TSNkdteSA6PQZxRGtmXSFcYfaR1KHBUGlZg0YS2n5ryM4Q_UDX3rLw8MPK-fwQO48EQdBOH8qX7BL_jOkzsY_voaJ0PhANXxSNiWjeKfPgpr2cwW4UH9x4R9gN63W3Yx",
         id: id,
       }
+      // api_key: 9bPpnQ55-8I0jLR62WqbyvBAv20IJ-zF-WJs7YJgLqZeRqokQg2L995TrDHKUVXEmRblz6We2EMClsxkS4vbfmRLLP5G1cPcV5FFX0fzSi388ha6a1qsHR5J97dWW3Yx
     let yelpAPI = {
         data: key,
         url: customUrl,
@@ -565,7 +532,16 @@ function createYelpDisplay(response) {
         $('.openOrClosed').text("CLOSED").css('color','red');
     }
     $("#goThere").addClass("scale-in");
-    $(".loveIt").addClass("scale-in");
+    debugger;
+    let localStorageString,favoritesArray;
+    localStorageString = localStorage.getItem("favoritesArray");
+        favoritesArray = localStorageString.split(',');
+    if(favoritesArray.includes(name)){
+        $('.removeFav').addClass('scale-in')
+    } else{
+        $('.loveIt').addClass('scale-in');
+    }
+    
     
     let yelpReview = $('.yelpLink').attr('target',"_blank").attr('href',response.url);
 }
