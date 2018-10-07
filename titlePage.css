@@ -198,6 +198,8 @@ body {
 
   .favoriteButtonContainer{
     position: relative;
+    display: inline;
+    margin-left: 8%;
   }
   .loveIt, .removeFav{
     border-radius: 10px;
@@ -382,5 +384,9 @@ body {
     margin-top:2%;
     padding:0;
     border:1px solid black;
+  }
+
+  .favoriteButtonContainer{
+    left:28%;
   }
   }
