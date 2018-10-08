@@ -2,7 +2,7 @@ $(document).ready(initializeApp);
 
 let foodInput = null;
 let food = null;
-let userPosition = {lat:33.6846,lng:117.8265};
+let userPosition = {lat:33.6846,lng:-117.8265};
 var labels = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
 var labelIndex = 0;
 var markerMap = {}
