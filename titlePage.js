@@ -599,7 +599,7 @@ function loveIt(restaurantName){
         let favoritesArray, localStorageString;
         localStorageString = localStorage.getItem("favoritesArray");
         if (localStorageString === null){
-            localStorageString = [];
+            favoritesArray = [];
         } else {
             favoritesArray = localStorageString.split(',');
         }
