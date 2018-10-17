@@ -255,7 +255,7 @@ function initAutocomplete() {
 
             if(favoritesArray.includes(locationName)){
                 favoriteLocation = true;
-                let favoriteSymbol = $('<i>').addClass("material-icons favIcon pink-text darken-2").text("favorite");
+                let favoriteSymbol = $('<i>').addClass("material-icons favIcon pink-text darken-2").text("favorite").css("font-size","inherit");
                 foodEstablishmentName = $('<li>').text(`${labels[index]}. ${place.name}`).attr('data-id', `marker-${index}`);
                 foodEstablishmentName.append(favoriteSymbol);
             } else {
@@ -368,6 +368,9 @@ function startOver(){
     $('.loveIt').removeClass("scale-in");
     $('.removeFav').removeClass("scale-in");
     $('#goThere').removeClass("scale-in");
+    $('#nutritionTab').css("cursor","default");
+    $('#restaurantTab').css("cursor","default");
+    $('#locationsTab').css("cursor","default");
     if(mapGenerated){
         recreateSearchBar();
     }
@@ -514,7 +517,7 @@ function getYelpDetails (id) {
  * Function the displays the data to dom dynamically
  */
 function createYelpDisplay(response) {
-    console.log("Response", response);
+    console.log("Errors Occur here :" , response);
     let name = response.name;
     $(".name").text(name);
     let phone = response.display_phone;
@@ -536,7 +539,7 @@ function createYelpDisplay(response) {
         $('.openOrClosed').text("CLOSED").css('color','red');
     }
     $("#goThere").addClass("scale-in");
-    debugger;
+    
     let localStorageString,favoritesArray;
     localStorageString = localStorage.getItem("favoritesArray");
     if (localStorageString === null){
@@ -561,7 +564,7 @@ function showNutrition(){
     $('.nutrition').addClass('show');
     $('#locationsTab').removeClass('selected');
     $('#restaurantTab').removeClass('selected');
-    $('#nutritionTab').addClass("selected");
+    $('#nutritionTab').addClass("selected").css("cursor","pointer");
     $('#nutritionTab').on('click',showNutrition);
 }
 
@@ -571,7 +574,7 @@ function showLocationList(){
     $('#locations').addClass('show');
     $('#nutritionTab').removeClass('selected');
     $('#restaurantTab').removeClass('selected');
-    $('#locationsTab').addClass('selected').removeClass('disabledTab');
+    $('#locationsTab').addClass('selected').removeClass('disabledTab').css("cursor","pointer");
     $('#locationsTab').on('click',showLocationList);
 }
 
@@ -580,8 +583,8 @@ function showRestaurantInfo(){
     $('#locations').removeClass('show');
     $('#restaurantInfo').addClass('show');
     $('#locationsTab').removeClass('selected');
-    $('#nutrition').removeClass('selected');
-    $('#restaurantTab').addClass('selected').removeClass('disabledTab');
+    $('#nutritionTab').removeClass('selected');
+    $('#restaurantTab').addClass('selected').removeClass('disabledTab').css("cursor","pointer");
     $('#restaurantTab').on('click',showRestaurantInfo);
 }
 
