@@ -152,7 +152,6 @@ body {
 
   #question{
     position: relative;
-    left:10%;
     margin:2%;
   }
   
@@ -253,8 +252,14 @@ body {
     font-weight: bold;
   }
   
-  .nutritionTitles > div {
-    border: 1px solid black;
+  .nutritionTitles > div{
+    border-bottom: 1px solid black;
+    margin-left:2%;
+  }
+
+  .nutritionTitles div div {
+    margin-right:2%;
+    display: inline-block;
   }
   
   .yelp {
@@ -350,6 +355,7 @@ body {
     width: 80%;
     display: block;
   }
+
   #nameTitle{
     display: none;
   }
@@ -384,12 +390,23 @@ body {
   }
   
   .tabsBar{
-    margin-top:2%;
+    margin-top:12%;
     padding:0;
     border:1px solid black;
   }
 
+  .yelp > div:nth-child(1){
+    border: none;
+    margin:0%;
+  }
+  .yelp > div:nth-child(2){
+    margin-top:5%;
+  }
+
   .favoriteButtonContainer{
-    left:28%;
+    display:block;
+    left:31%;
+    margin:2%;
   }
-  }
+  
+}
