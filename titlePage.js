@@ -2,12 +2,19 @@ $(document).ready(initializeApp);
 
 let foodInput = null;
 let food = null;
-let userPosition = {lat:33.6846,lng:-117.8265};
+let urlParams = new URLSearchParams(window.location.search);
+let userPosition = {lat:33.6348807,lng:-117.74057719999999};
+if(urlParams.get('lat')!== null && urlParams.get('lng')!== null){
+    userPosition.lat = parseFloat(urlParams.get('lat'));
+    userPosition.lng = parseFloat(urlParams.get('lng'));
+}
+
 var labels = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
 var labelIndex = 0;
 var markerMap = {}
 var mapGenerated = false;
 let favoriteLocation = false;
+
 /**
  * apply click handlers once document is ready
  * @param {}
@@ -16,6 +23,10 @@ function initializeApp () {
     addClickHandler();
     $(".submit").addClass("scale-in");
     $("#reset").addClass("scale-in");
+    if(urlParams.get('lat')!== null && urlParams.get('lng')!== null){
+            userPosition.lat= parseFloat(urlParams.get('lat'));
+            userPosition.lng= parseFloat(urlParams.get('lng'));
+        }
 }
 
 /**
@@ -32,6 +43,9 @@ function addClickHandler () {
     $('#geoModalTrigger').click(showModal);
     $('#titlePage').click(removeIntroModal);
     pressEnterToSubmit();
+    if(urlParams.get('food')!== null){
+        submitClicked();
+    }
 }
 
 /**
@@ -50,9 +64,16 @@ function pressEnterToSubmit(){
  */
 
 function submitClicked () { 
-    food = $("#food").val()
-    initAutocomplete();
-    changePage();
+    if(urlParams.get('food')){
+        food = urlParams.get('food');
+        $("#food").val(food);
+        initAutocomplete();
+        changePage();
+    } else {
+        food = $("#food").val()
+        initAutocomplete();
+        changePage();
+    } 
 }
 
 /**
@@ -61,11 +82,26 @@ function submitClicked () {
 function changePage () {
     $('#titlePage').addClass('hide');
     $('.foodPage').addClass('show').removeClass('hide');
-    nutritionCallFromServer(food);
-    showNutrition();
+    
+    
     $('#locationsTab').addClass('disabledTab');
     $('#restaurantTab').addClass('disabledTab');
-    $("#userFoodSubmission").text(food);
+    if(urlParams.get('food') !== null){
+        $("#userFoodSubmission").text(urlParams.get('food'));
+    }else {
+        $("#userFoodSubmission").text(food);
+    }
+    nutritionCallFromServer(food);
+    showNutrition();
+    // window.location = "https://johncarlisle.design/SteadyEats/" + food;
+    // window.location = `${window.location.href}&food=${food}`; 
+    const newUrlParams = new URLSearchParams(window.location.search.slice(1));
+    let newUrlBase = window.location.toString();
+    if (newUrlBase.includes('?')){
+        newUrlBase = newUrlBase.slice(0, newUrlBase.indexOf('?'));
+    }
+    newUrlParams.set('food', food);
+    history.pushState(null, null, `${newUrlBase}?${newUrlParams.toString()}`);
 }
 /**
  * Will use session storage to get user
@@ -73,18 +109,42 @@ function changePage () {
  */
 
 function enableGeolocation(){
-    if (navigator.geolocation) {
+  if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(function(position) {
-            const pos = {
+            let pos;
+            if(urlParams.get('lat')!== null && urlParams.get('lng')!== null){
+                pos = {
+                    lat: parseFloat(urlParams.get('lat')),
+                    lng: parseFloat(urlParams.get('lng')),
+                }
+            } else {
+                pos = {
                 lat: position.coords.latitude,
                 lng: position.coords.longitude
+            }
         }
         userPosition = pos;
         console.log(pos);
         $('#enableGeo').removeClass('pulse');
+        // window.location = `${window.location.href}?lat=${pos.lat}&lng=${pos.lng}`; 
+
+        // history.pushState(null, null, `${window.location.href}?lat=${pos.lat}&lng=${pos.lng}`);
+
+        const newUrlParams = new URLSearchParams(window.location.search.slice(1));
+        let newUrlBase = window.location.toString();
+        if (newUrlBase.includes('?')){
+            newUrlBase = newUrlBase.slice(0, newUrlBase.indexOf('?'));
+        }
+        newUrlParams.set('lat', userPosition.lat);
+        newUrlParams.set('lng', userPosition.lng);
+        if(urlParams.get('lat') == null){
+        history.pushState(null, null, `${newUrlBase}?${newUrlParams.toString()}`);
+        }
     })
 }
-}
+    }
+  
+
 
 let infoWindow;
 let map;
@@ -358,6 +418,13 @@ function computeTotalDistance(result) {
  * back to first screen
  */
 function startOver(){ 
+    // history.pushState(null, null, window.location.pathname);
+    const newUrlParams = new URLSearchParams(window.location.search);
+    let newUrlBase = window.location.toString();
+    newUrlParams.delete("food");
+    newUrlBase = newUrlBase.slice(0, newUrlBase.indexOf('?'));
+    history.pushState(null, null, `${newUrlBase}?${newUrlParams.toString()}`);
+    food='';
     $('#titlePage').addClass('show').removeClass('hide');
     $('.foodPage').addClass('hide').removeClass('show');
     $('#pic').show();
