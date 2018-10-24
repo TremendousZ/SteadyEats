@@ -422,6 +422,7 @@ function startOver(){
     const newUrlParams = new URLSearchParams(window.location.search);
     let newUrlBase = window.location.toString();
     newUrlParams.delete("food");
+    console.log("Check url param", newUrlParams.get("food"));
     newUrlBase = newUrlBase.slice(0, newUrlBase.indexOf('?'));
     history.pushState(null, null, `${newUrlBase}?${newUrlParams.toString()}`);
     food='';
