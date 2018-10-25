@@ -109,7 +109,8 @@ function changePage () {
  */
 
 function enableGeolocation(){
-  if (navigator.geolocation) {
+    $("#search").removeClass("disabled");
+    if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(function(position) {
             let pos;
             if(urlParams.get('lat')!== null && urlParams.get('lng')!== null){

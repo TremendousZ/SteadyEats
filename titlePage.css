@@ -166,7 +166,6 @@ body {
   }
   .modalContainer{
     display: none;
-    height:20%;
     width:61%;
     position: absolute;
     top:40%;
@@ -198,12 +197,17 @@ body {
 
   .favoriteButtonContainer{
     position: relative;
-    transform: translateX(-6%);
-    text-align: center;
   }
   .loveIt, .removeFav{
     border-radius: 10px;
+    width: 25%;
+    margin: 0 auto;
+    display: block !important;
+  }
+  .removeFav{
     position: absolute;
+    top:0;
+    left:38%;
   }
   
   #findMore:hover {
@@ -376,7 +380,6 @@ body {
     left:50%;
     transform: translateX(-50%);
     width:107%;
-    text-align: center;
   }
 
 
