@@ -1,13 +1,14 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
     <head>
         <title>SteadyEats</title>
         <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
         <link rel="stylesheet" type="text/css" href="titlePage.css">
         <meta charset="UTF-8">
         <meta name="viewport"
-              content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+              content="width=device-width, initial-scale=1.0">
         <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <meta name="Description" content="This app is designed to help you find the food you want regardless of where you are. Just enable your current location, then enter the type of food you enjoy, browse the results, and find awesome restaurants near you."> "
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
         <script type="text/javascript" src="titlePage.js"></script>
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-rc.2/css/materialize.min.css">
@@ -26,11 +27,11 @@
         <div>
             <div class="row">
                 <div id="logoTitlePage" class="col s12 center-align">
-                    <img id="logoImage" class="center-align" src="img/turtle_burger.png">
+                    <img id="logoImage" class="center-align" src="img/turtle_burger.png" alt="Steady Eats Logo">
                 </div>
             </div>
             <div id="name" class="col s12 center-align">
-                <img id="nameImage" class="center-align" src="img/titleName.png">
+                <img id="nameImage" class="center-align" src="img/titleName.png" alt="Steady Eats">
             </div>
         </div>
         <div class="row">
@@ -45,7 +46,7 @@
                     
                     <input class="center-align white autocomplete" type="text" placeholder="type food item here" id="food">
                     <label for="food"></label>
-                    <input value="Search" class="btn orange submit" id="search">
+                    <input value="Search" class="btn orange submit disabled" id="search">
                 </div>
             </form>
             <button class="btn pulse" type = 'button' id="enableGeo">Enable Current Location</button>
@@ -62,7 +63,7 @@
     
     <div class = "container foodPage" >
         <div class="nav-wrapper header orange">
-          <img id="logo" src="img/turtle_burger.png">
+          <img id="logo" src="img/turtle_burger.png" alt="Steady Eats Logo of Cute Turtle with Burger Shell">
           <div id="nameTitle"> Steady Eats </div>
           <div id="userFoodSubmission"></div>
         </div>
@@ -125,7 +126,7 @@
               <div class = "yelp container" id="restaurantInfo">
                   <div class="row">
                     <div class="yelpImageContainer hide-on-small-only">
-                      <img id="yelpImage" src="img/turtle_pizza.jpg">
+                      <img id="yelpImage" src="img/turtle_pizza.jpg" alt="Cute Turtle Logo Eating Pizza">
                     </div>
                     </div>
                     <div class="yelpContainer row">
