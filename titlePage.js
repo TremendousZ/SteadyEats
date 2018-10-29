@@ -14,7 +14,7 @@ var labelIndex = 0;
 var markerMap = {}
 var mapGenerated = false;
 let favoriteLocation = false;
-
+let geoEnabled = false;
 /**
  * apply click handlers once document is ready
  * @param {}
@@ -46,6 +46,7 @@ function addClickHandler () {
     if(urlParams.get('food')!== null){
         submitClicked();
     }
+    $("#food").on('keyup',unlockSubmitButton);
 }
 
 /**
@@ -59,11 +60,24 @@ function pressEnterToSubmit(){
     };
 }
 
+function unlockSubmitButton(){
+    let foodInput = $('#food').val();
+    if(geoEnabled == true && foodInput !== ""){
+        $("#search").removeClass("disabled");
+    }
+}
+
 /**
  * Once user presses submit, get input and change page
  */
 
 function submitClicked () { 
+    let foodInput = $('#food').val();
+    if(foodInput == ""){
+        $('.noFoodItem').text("please enter a food item in the search bar").css('color','red');
+        return; 
+    }
+    $('.noFoodItem').text('');
     if(urlParams.get('food')){
         food = urlParams.get('food');
         $("#food").val(food);
@@ -82,8 +96,6 @@ function submitClicked () {
 function changePage () {
     $('#titlePage').addClass('hide');
     $('.foodPage').addClass('show').removeClass('hide');
-    
-    
     $('#locationsTab').addClass('disabledTab');
     $('#restaurantTab').addClass('disabledTab');
     if(urlParams.get('food') !== null){
@@ -93,8 +105,6 @@ function changePage () {
     }
     nutritionCallFromServer(food);
     showNutrition();
-    // window.location = "https://johncarlisle.design/SteadyEats/" + food;
-    // window.location = `${window.location.href}&food=${food}`; 
     const newUrlParams = new URLSearchParams(window.location.search.slice(1));
     let newUrlBase = window.location.toString();
     if (newUrlBase.includes('?')){
@@ -109,7 +119,7 @@ function changePage () {
  */
 
 function enableGeolocation(){
-    $("#search").removeClass("disabled");
+    
     if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(function(position) {
             let pos;
@@ -125,12 +135,9 @@ function enableGeolocation(){
             }
         }
         userPosition = pos;
-        console.log(pos);
         $('#enableGeo').removeClass('pulse');
-        // window.location = `${window.location.href}?lat=${pos.lat}&lng=${pos.lng}`; 
-
-        // history.pushState(null, null, `${window.location.href}?lat=${pos.lat}&lng=${pos.lng}`);
-
+        geoEnabled=true;
+        unlockSubmitButton();
         const newUrlParams = new URLSearchParams(window.location.search.slice(1));
         let newUrlBase = window.location.toString();
         if (newUrlBase.includes('?')){
@@ -252,7 +259,6 @@ function initAutocomplete() {
     // more details for that place.
     searchBox.addListener('places_changed', function() {
       let places = searchBox.getPlaces();
-        console.log("Places:", places);
         if (places.length == 0) {
             let noRestaurantFound = $('<li>').text("No locations found");
             $('.marker-list').append(noRestaurantFound);
@@ -423,7 +429,6 @@ function startOver(){
     const newUrlParams = new URLSearchParams(window.location.search);
     let newUrlBase = window.location.toString();
     newUrlParams.delete("food");
-    console.log("Check url param", newUrlParams.get("food"));
     newUrlBase = newUrlBase.slice(0, newUrlBase.indexOf('?'));
     history.pushState(null, null, `${newUrlBase}?${newUrlParams.toString()}`);
     food='';
@@ -675,7 +680,6 @@ function loveIt(restaurantName){
         } else {
             favoritesArray = localStorageString.split(',');
         }
-        console.log("Favorites Array", favoritesArray);
         favoritesArray.push(restaurantName);
         favoritesArray.join(',');
         localStorage.setItem("favoritesArray", favoritesArray);
@@ -695,7 +699,6 @@ function removeFromFavorites(restaurantName){
         }
         favoritesArray = localStorageString.split(',');
         let editedFavoritesArray = favoritesArray.filter(name => name !== restaurantName);
-        console.log("Check this array",editedFavoritesArray);
         editedFavoritesArray.join(',');
         localStorage.setItem("favoritesArray",editedFavoritesArray);
         $(".removeFav").removeClass("scale-in");
