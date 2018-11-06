@@ -78,16 +78,9 @@ function submitClicked () {
         return; 
     }
     $('.noFoodItem').text('');
-    if(urlParams.get('food')){
-        food = urlParams.get('food');
-        $("#food").val(food);
-        initAutocomplete();
-        changePage();
-    } else {
         food = $("#food").val()
         initAutocomplete();
         changePage();
-    } 
 }
 
 /**
@@ -591,7 +584,6 @@ function getYelpDetails (id) {
  * Function the displays the data to dom dynamically
  */
 function createYelpDisplay(response) {
-    console.log("Errors Occur here :" , response);
     let name = response.name;
     $(".name").text(name);
     let phone = response.display_phone;
