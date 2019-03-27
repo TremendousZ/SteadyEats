@@ -530,9 +530,8 @@ let yelpResponse = null;
 function requestYelpData (name, address, city) {
     $(".yelpTitle").addClass('show');
     $(".yelpInfo").addClass('show');
-    let customUrl = "https://yelp.ongandy.com/businesses/matches";
+    let customUrl = "php/business_match.php";
     let key = {
-        api_key: "9bPpnQ55-8I0jLR62WqbyvBAv20IJ-zF-WJs7YJgLqZeRqokQg2L995TrDHKUVXEmRblz6We2EMClsxkS4vbfmRLLP5G1cPcV5FFX0fzSi388ha6a1qsHR5J97dWW3Yx",
         name: name,
         address1: address,
         city: city,
@@ -544,6 +543,9 @@ function requestYelpData (name, address, city) {
         url: customUrl,
         method: "POST",
         dataType: "json",
+        headers: {
+            "Authorization": "Bearer 9bPpnQ55-8I0jLR62WqbyvBAv20IJ-zF-WJs7YJgLqZeRqokQg2L995TrDHKUVXEmRblz6We2EMClsxkS4vbfmRLLP5G1cPcV5FFX0fzSi388ha6a1qsHR5J97dWW3Yx"
+        },
         success: function (response) {
             let businessId= response.businesses[0].id;
             getYelpDetails(businessId);
@@ -560,17 +562,19 @@ function requestYelpData (name, address, city) {
  * @param id, business id we got from previous call
  */
 function getYelpDetails (id) {
-    let customUrl = "https://yelp.ongandy.com/businesses/details";
+    let customUrl = "php/business_details.php";
     let key = {
-        api_key: "TSNkdteSA6PQZxRGtmXSFcYfaR1KHBUGlZg0YS2n5ryM4Q_UDX3rLw8MPK-fwQO48EQdBOH8qX7BL_jOkzsY_voaJ0PhANXxSNiWjeKfPgpr2cwW4UH9x4R9gN63W3Yx",
         id: id,
-      }
+    }
       // api_key: 9bPpnQ55-8I0jLR62WqbyvBAv20IJ-zF-WJs7YJgLqZeRqokQg2L995TrDHKUVXEmRblz6We2EMClsxkS4vbfmRLLP5G1cPcV5FFX0fzSi388ha6a1qsHR5J97dWW3Yx
     let yelpAPI = {
         data: key,
         url: customUrl,
         method: "POST",
         dataType: "json",
+        headers: {
+            "Authorization": "Bearer 9bPpnQ55-8I0jLR62WqbyvBAv20IJ-zF-WJs7YJgLqZeRqokQg2L995TrDHKUVXEmRblz6We2EMClsxkS4vbfmRLLP5G1cPcV5FFX0fzSi388ha6a1qsHR5J97dWW3Yx"
+        },
         success:  createYelpDisplay,
         error: function (error) {
             console.log("error from getYelpDetails: ", error);
